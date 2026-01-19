@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Effoplay</title>
+
+<style>
+:root{
+  --bg:#020617;
+  --card:#0f172a;
+  --accent:#22c55e;
+  --accent2:#38bdf8;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(180deg,#020617,#020617,#0f172a);
+  color:#fff;
+}
+
+header{
+  padding:18px;
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  background:#020617;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.container{padding:16px}
+
+/* GAME LIST */
+.games{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:15px;
+}
+
+.game{
+  background:var(--card);
+  border-radius:18px;
+  padding:16px;
+  text-align:center;
+  cursor:pointer;
+  transition:.3s;
+  border:1px solid #1e293b;
+}
+
+.game:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 20px rgba(56,189,248,.3);
+}
+
+.game img{
+  width:90px;
+  height:90px;
+  border-radius:16px;
+}
+
+.game.active{
+  outline:2px solid var(--accent2);
+}
+
+/* FORM */
+.form{
+  margin-top:22px;
+  background:var(--card);
+  padding:18px;
+  border-radius:18px;
+  border:1px solid #1e293b;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin-top:12px;
+  border-radius:12px;
+  border:none;
+  background:#020617;
+  color:white;
+  font-size:15px;
+}
+
+/* NOMINAL */
+.nominals{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-top:14px;
+}
+
+.nominal{
+  background:#020617;
+  padding:14px;
+  text-align:center;
+  border-radius:14px;
+  cursor:pointer;
+  border:1px solid #1e293b;
+}
+
+.nominal.active{
+  background:var(--accent);
+  color:#022c22;
+  font-weight:bold;
+}
+
+/* PRICE */
+.price{
+  margin-top:15px;
+  font-size:18px;
+  font-weight:700;
+  color:var(--accent);
+}
+
+/* BUTTON */
+button{
+  margin-top:16px;
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(90deg,#22c55e,#16a34a);
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* PAYMENT */
+.payment{
+  margin-top:22px;
+  background:var(--card);
+  padding:16px;
+  border-radius:18px;
+  text-align:center;
+}
+
+.payment img{
+  width:200px;
+  margin-top:10px;
+  border-radius:12px;
+}
+
+/* FOOTER */
+footer{
+  margin-top:30px;
+  padding:12px;
+  font-size:14px;
+  text-align:center;
+  background:#020617;
+  color:#94a3b8;
+}
+
+/* FLOAT WA */
+.wa-float{
+  position:fixed;
+  bottom:18px;
+  right:18px;
+  background:#22c55e;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  color:#022c22;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>EFFOPLAY</header>
+
+<div class="container">
+
+<h3>Pilih Game</h3>
+<div class="games">
+  <div class="game" onclick="setGame(this,'Mobile Legends')">
+    <img src="images/mobile legend.png">
+    <p>Mobile Legends</p>
+  </div>
+  <div class="game" onclick="setGame(this,'Free Fire')">
+    <img src="https://i.imgur.com/8JY1JQj.png">
+    <p>Free Fire</p>
+  </div>
+  <div class="game" onclick="setGame(this,'PUBG Mobile')">
+    <img src="https://i.imgur.com/9XzZQZf.png">
+    <p>PUBG Mobile</p>
+  </div>
+  <div class="game" onclick="setGame(this,'Roblox')">
+      <img src="images/mobile legend.png" alt="">
+      <p>Roblox</p>
+</div>
+</div>
+
+
+
+
+<div class="form">
+<h3>Detail Top Up</h3>
+
+<input id="game" placeholder="Game" readonly>
+<input id="userid" placeholder="User ID">
+
+<h4>Pilih Nominal</h4>
+<div class="nominals">
+  <div class="nominal" onclick="setNominal(this,50)">50 Diamonds</div>
+  <div class="nominal" onclick="setNominal(this,100)">100 Diamonds</div>
+  <div class="nominal" onclick="setNominal(this,250)">250 Diamonds</div>
+  <div class="nominal" onclick="setNominal(this,500)">500 Diamonds</div>
+</div>
+
+<div class="price" id="harga">Harga: -</div>
+
+<button onclick="orderWA()">ORDER VIA WHATSAPP</button>
+</div>
+
+<div class="payment">
+<h3>Pembayaran</h3>
+<p>QRIS / E-Wallet</p>
+<img src="https://i.imgur.com/YOURQRIS.png">
+<p>Upload bukti transfer ke WhatsApp</p>
+</div>
+
+</div>
+
+<footer>© 2026 Top Up Game • Fast • Safe • Trusted</footer>
+
+<a class="wa-float" onclick="orderWA()">💬</a>
+
+<script>
+let hargaList={
+  50:10000,
+  100:18000,
+  250:42000,
+  500:80000
+};
+
+let selectedNominal=null;
+
+function setGame(el,g){
+  document.querySelectorAll('.game').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  game.value=g;
+}
+
+function setNominal(el,n){
+  document.querySelectorAll('.nominal').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  selectedNominal=n;
+  harga.innerText="Harga: Rp "+hargaList[n].toLocaleString();
+}
+
+function orderWA(){
+  if(!game.value||!userid.value||!selectedNominal){
+    alert("Tulis Bijak");
+    return;
+  }
+  let wa="6281234567890"; // GANTI
+  let text=`Halo Admin,
+Order Top Up:
+Game: ${game.value}
+User ID: ${userid.value}
+Nominal: ${selectedNominal}
+Harga: Rp ${hargaList[selectedNominal]}`;
+  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(text)}`);
+}
+</script>
+
+</body>
+</html><!--  -->
